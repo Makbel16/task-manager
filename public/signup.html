@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - TaskFlow</title>
+    <link rel="stylesheet" href="signup.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="auth-page">
+    <!-- Background Image -->
+    <div class="auth-bg">
+        <img src="image1.png" alt="Background">
+        <div class="bg-overlay"></div>
+    </div>
+
+    <div class="auth-container signup-container">
+        <!-- Left Side - Signup Form -->
+        <div class="auth-card signup-card">
+            <div class="auth-header">
+                <a href="index.html" class="auth-logo">
+                    <i class="fas fa-tasks"></i>
+                    <span>TaskFlow</span>
+                </a>
+                <h1>Create Account</h1>
+                <p>Start managing your tasks today</p>
+            </div>
+            
+            <form id="signupForm" class="auth-form">
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-user"></i>
+                        Username
+                    </label>
+                    <input type="text" id="username" name="username" placeholder="Choose a username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i>
+                        Email Address
+                    </label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i>
+                        Password
+                    </label>
+                    <div class="password-input">
+                        <input type="password" id="password" name="password" placeholder="Create a password" required>
+                        <i class="fas fa-eye toggle-password"></i>
+                    </div>
+                    <div class="password-strength">
+                        <div class="strength-bar"></div>
+                        <span>Password strength</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">
+                        <i class="fas fa-lock"></i>
+                        Confirm Password
+                    </label>
+                    <div class="password-input">
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                    </div>
+                </div>
+                
+                <div class="form-options">
+                    <label class="checkbox">
+                        <input type="checkbox" name="terms" required>
+                        <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn-signin">
+                    <i class="fas fa-user-plus"></i>
+                    Create Account
+                </button>
+                
+                <div class="auth-divider">
+                    <span>or</span>
+                </div>
+                
+                <div class="social-login">
+                    <button type="button" class="btn-google">
+                        <i class="fab fa-google"></i>
+                        Sign up with Google
+                    </button>
+                </div>
+            </form>
+            
+            <div class="auth-footer">
+                <p>Already have an account? <a href="login.html">Sign in</a></p>
+            </div>
+        </div>
+
+        <!-- Right Side - Animated Features Panel -->
+        <div class="auth-features-panel">
+            <div class="panel-content">
+                <!-- Animated Badge -->
+                <div class="panel-badge">
+                    <span class="live-badge">
+                        <span class="pulse-dot"></span>
+                        WHY CHOOSE TASKFLOW
+                    </span>
+                </div>
+
+                <!-- Main Title -->
+                <h2 class="panel-title">
+                    Join <span class="gradient-text">10,000+</span> Productive Users
+                </h2>
+
+                <!-- Feature Cards with Icons -->
+                <div class="feature-cards">
+                    <!-- Feature 1 -->
+                    <div class="feature-card-right" data-delay="0">
+                        <div class="feature-icon-wrapper">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="feature-details">
+                            <h4>AI-Powered Task Management</h4>
+                            <p>Smart prioritization and intelligent suggestions based on your work patterns</p>
+                            <div class="feature-stats">
+                                <span class="stat">98% accuracy</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="feature-card-right" data-delay="200">
+                        <div class="feature-icon-wrapper">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="feature-details">
+                            <h4>Advanced Analytics</h4>
+                            <p>Track your productivity with beautiful charts and detailed insights</p>
+                            <div class="feature-stats">
+                                <span class="stat">15+ metrics</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="feature-card-right" data-delay="400">
+                        <div class="feature-icon-wrapper">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="feature-details">
+                            <h4>Team Collaboration</h4>
+                            <p>Work together seamlessly with real-time sync and team workspaces</p>
+                            <div class="feature-stats">
+                                <span class="stat">Unlimited members</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="feature-card-right" data-delay="600">
+                        <div class="feature-icon-wrapper">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="feature-details">
+                            <h4>Enterprise Security</h4>
+                            <p>Bank-level encryption and 2FA protection for your peace of mind</p>
+                            <div class="feature-stats">
+                                <span class="stat">256-bit encryption</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial Section -->
+                <div class="testimonial-section">
+                    <div class="testimonial-avatars">
+                        <img src="https://i.pravatar.cc/40?img=1" alt="User">
+                        <img src="https://i.pravatar.cc/40?img=2" alt="User">
+                        <img src="https://i.pravatar.cc/40?img=3" alt="User">
+                        <img src="https://i.pravatar.cc/40?img=4" alt="User">
+                        <div class="avatar-count">+2k</div>
+                    </div>
+                    <div class="testimonial-text">
+                        <i class="fas fa-quote-left"></i>
+                        <p>TaskFlow transformed how I manage my daily tasks. The AI suggestions are incredibly accurate!</p>
+                        <div class="testimonial-author">
+                            <strong>Sarah Chen</strong>
+                            <span>Product Manager</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Counter -->
+                <div class="stats-counter">
+                    <div class="counter-item">
+                        <span class="counter-number" data-target="500">500+</span>
+                        <span class="counter-label">Daily Active Users</span>
+                    </div>
+                    <div class="counter-item">
+                        <span class="counter-number" data-target="50">50K+</span>
+                        <span class="counter-label">Tasks Completed</span>
+                    </div>
+                    <div class="counter-item">
+                        <span class="counter-number" data-target="4.9">4.9/5</span>
+                        <span class="counter-label">User Rating</span>
+                    </div>
+                </div>
+
+                <!-- Trust Badges -->
+                <div class="trust-badges">
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i>
+                        <span>GDPR Compliant</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i>
+                        <span>SSL Secured</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-check-circle"></i>
+                        <span>24/7 Support</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decorative Elements -->
+            <div class="panel-glow"></div>
+            <div class="floating-shapes">
+                <div class="shape"></div>
+                <div class="shape"></div>
+                <div class="shape"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,475 @@
+/* ==================== LOGIN PAGE WITH TRANSPARENT FORM ==================== */
+
+/* Auth Page */
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    padding: 20px;
+    position: relative;
+    margin: 0;
+}
+
+/* Your Custom Background Image */
+.auth-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.auth-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Auth Container */
+.auth-container {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+/* Transparent Auth Card */
+.auth-card {
+    background: rgba(0, 0, 0, 0.477);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.5s ease;
+    border: 1px solid rgba(25, 22, 22, 0.2);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Logo - White with transparency */
+.auth-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.auth-logo i {
+    font-size: 32px;
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+}
+
+.auth-logo span {
+    font-size: 24px;
+    font-weight: 600;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Tabs */
+.auth-tabs {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 10px;
+}
+
+.tab {
+    background: none;
+    border: none;
+    font-size: 18px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    padding: 0 0 10px 0;
+    position: relative;
+    transition: color 0.3s;
+}
+
+.tab.active {
+    color: white;
+}
+
+.tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: white;
+    border-radius: 3px 3px 0 0;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes slideIn {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+/* ==================== FIXED FORM INPUTS ==================== */
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* ALL inputs use box-sizing border-box - FIXED */
+.form-group input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    font-size: 15px;
+    transition: all 0.3s;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    backdrop-filter: blur(5px);
+    box-sizing: border-box; /* CRITICAL FIX - Prevents width expansion */
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: white;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Email input specific */
+.form-group input[type="email"] {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Password Container - FIXED */
+.password-input {
+    position: relative;
+    width: 100%;
+}
+
+/* Password input field - FIXED */
+.password-input input {
+    width: 100%;
+    padding: 14px 45px 14px 16px; /* Right padding for icon */
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    font-size: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    backdrop-filter: blur(5px);
+    box-sizing: border-box; /* CRITICAL FIX */
+}
+
+/* Eye icon - properly positioned - FIXED */
+.toggle-password {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: color 0.3s;
+    z-index: 2;
+    font-size: 18px;
+    width: 20px;
+    text-align: center;
+}
+
+.toggle-password:hover {
+    color: white;
+}
+
+/* Password stars font */
+.form-group input[value="*********"],
+.form-group input[type="password"] {
+    font-family: 'password', Arial, sans-serif;
+    letter-spacing: 2px;
+}
+
+/* Form Options */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+/* Custom Checkbox */
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    position: relative;
+    padding-left: 28px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    transition: all 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.checkbox:hover input ~ .checkmark {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.checkbox input:checked ~ .checkmark {
+    background: white;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid #6366f1;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Forgot Password */
+.forgot-password {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid transparent;
+}
+
+.forgot-password:hover {
+    border-bottom-color: white;
+}
+
+/* Sign In Button */
+.btn-signin {
+    width: 100%;
+    padding: 16px;
+    background: white;
+    border: none;
+    border-radius: 12px;
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-signin:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    background: #f0f0f0;
+}
+
+.btn-signin:active {
+    transform: translateY(0);
+}
+
+/* Divider */
+.auth-divider {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: calc(50% - 40px);
+    height: 1px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.auth-divider::before {
+    left: 0;
+}
+
+.auth-divider::after {
+    right: 0;
+}
+
+.auth-divider span {
+    background: transparent;
+    padding: 0 15px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Google Button */
+.btn-google {
+    width: 100%;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(5px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s;
+    letter-spacing: 0.5px;
+}
+
+.btn-google:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-google i {
+    font-size: 20px;
+    color: white;
+}
+
+/* Footer Links */
+.auth-footer {
+    margin-top: 30px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+}
+
+.auth-footer a {
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s;
+    margin: 0 5px;
+    border-bottom: 1px solid transparent;
+}
+
+.auth-footer a:hover {
+    border-bottom-color: white;
+}
+
+.auth-footer span {
+    margin: 0 5px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Password font for stars */
+@font-face {
+    font-family: 'password';
+    src: url('https://cdn.jsdelivr.net/npm/password-font@1.0.0/fonts/password.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 30px 20px;
+    }
+    
+    .auth-tabs {
+        gap: 20px;
+    }
+    
+    .tab {
+        font-size: 16px;
+    }
+    
+    .form-options {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .btn-signin,
+    .btn-google {
+        padding: 14px;
+        font-size: 14px;
+    }
+}
+
+/* Optional: Add a subtle glow effect on the card */
+.auth-card:hover {
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+}
+
+/* Make sure text is readable on any background */
+.auth-logo span,
+.tab,
+.form-group label,
+.checkbox,
+.forgot-password,
+.auth-divider span,
+.auth-footer a {
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}

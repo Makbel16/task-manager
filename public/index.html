@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - Beautiful Task Management</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-tasks"></i>
+                <span>TaskFlow</span>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="#home" class="active">Home</a>
+                <a href="#features">Features</a>
+                <a href="login.html" class="btn-login">Login</a>
+                <a href="signup.html" class="btn-signup">Sign Up</a>
+            </div>
+            <div class="mobile-menu" id="mobileMenu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Background Image -->
+    <section class="hero" id="home" style="background-image: url('image1.png');">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="taskflow-ai">TASKFLOW</span>
+                <span class="gradient-text">AI</span>
+            </h1>
+            <h2 class="hero-subtitle">Orchestrate Your Ambition</h2>
+            <p class="hero-description">The beautiful, simple, and efficient way to manage your tasks with AI-powered assistance. Join thousands of productive people using TaskFlowAI.</p>
+            <div class="hero-buttons">
+              
+              
+            </div>
+            <div class="stats glass-effect">
+                <div class="stat-item">
+                    <span class="stat-number">10K+</span>
+                    <span class="stat-label">Active Users</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">50K+</span>
+                    <span class="stat-label">Tasks Completed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">4.9</span>
+                    <span class="stat-label">User Rating</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-scroll-indicator">
+            <span>Scroll to explore</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="how-it-works" id="features">
+        <div class="container">
+            <h2 class="section-title">How <span class="gradient-text">TaskFlow</span> Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Create Account</h3>
+                    <p>Sign up for free in less than 30 seconds</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Add Tasks</h3>
+                    <p>Start adding your tasks with details and priorities</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Stay Organized</h3>
+                    <p>Manage, complete, and track your progress</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    
+    <!-- Footer -->
+    <footer>
+        <div class="fbtn">
+            <div class="footer-section">
+                <h3><i class="fas fa-tasks"></i> TaskFlow</h3>
+                <p>Beautiful task management for productive people.</p>
+                
+            </div>
+            
+            <div class="footer-section">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                   
+                </ul>
+            </div>
+            
+          
+            
+          
+        </div>
+        <div class="fbtn">
+            <p>
+               Developed By Makbel Kebede
+            </p>
+            
+            <p>&copy; 2024 TaskFlow. All rights reserved.
+                
+            </p>
+            
+        </div>
+    </footer>
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
