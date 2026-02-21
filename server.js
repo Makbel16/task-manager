@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const path = require('path');  // ADD THIS LINE - IMPORTANT for serving HTML
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
 const { connectToDatabase } = require('./db');
@@ -23,6 +24,28 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.static('public'));
+
+// ==================== ADD THESE ROUTES TO SERVE HTML PAGES ====================
+// Serve index.html for the root route
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Serve login page
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+// Serve signup page
+app.get('/signup', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'signup.html'));
+});
+
+// Serve dashboard page
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+});
+// ==================== END OF HTML ROUTES ====================
 
 // Session middleware
 app.use(session({
