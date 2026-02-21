@@ -1,5 +1,5 @@
 // API base URL
-const API_BASE = '/api/auth';
+const API_BASE = '/api';  // ✅ THIS IS CORRECT!
 console.log('Fetching URL:', `${API_BASE}/auth/signup`);
 
 // DOM Elements
