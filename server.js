@@ -21,16 +21,20 @@ console.log('SESSION_SECRET:', process.env.SESSION_SECRET ? 'Found ✓' : 'Not f
 
 // 1. CORS middleware first
 app.use(cors({
-    origin: true,
-    credentials: true
+    origin: process.env.NODE_ENV === 'production' 
+        ? ['https://task-manager-beta-green-62.vercel.app', 'https://*.vercel.app']
+        : true,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // 2. JSON parser for API requests
 app.use(express.json());
 
 // 3. Static files middleware - THIS MUST COME BEFORE ROUTES
-// This serves all CSS, JS, images from public folder
 app.use(express.static('public'));
+
 // ==================== EXPLICIT STATIC FILE ROUTES ====================
 // Serve CSS files explicitly
 app.get('/style.css', (req, res) => {
@@ -63,12 +67,11 @@ app.get('/image1.png', (req, res) => {
 });
 // ==================== END EXPLICIT ROUTES ====================
 
-// 4. Logging middleware (optional, for debugging)
+// 4. Logging middleware (for debugging)
 app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`);
     next();
 });
-
 
 // ==================== HTML ROUTES ====================
 
@@ -87,26 +90,40 @@ app.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'signup.html'));
 });
 
-// Serve dashboard page
+// Serve dashboard page (with auth check)
 app.get('/dashboard', (req, res) => {
+    if (!req.session.userId) {
+        console.log('Unauthenticated access to dashboard, redirecting to login');
+        return res.redirect('/login');
+    }
     res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
 });
 
-// ==================== SESSION MIDDLEWARE ====================
+// ==================== API ROOT ROUTE ====================
+app.get('/api', (req, res) => {
+    res.json({ 
+        message: 'TaskFlow API is running',
+        endpoints: {
+            auth: '/api/auth/*',
+            tasks: '/api/tasks'
+        }
+    });
+});
 
+// ==================== SESSION MIDDLEWARE ====================
 app.use(session({
     secret: process.env.SESSION_SECRET || 'your-secret-key-change-this',
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: { 
         secure: process.env.NODE_ENV === 'production',
         maxAge: 24 * 60 * 60 * 1000,
-        sameSite: 'lax'
+        sameSite: 'lax',
+        httpOnly: true
     }
 }));
 
 // ==================== AUTHENTICATION MIDDLEWARE ====================
-
 function isAuthenticated(req, res, next) {
     if (req.session.userId) {
         next();
@@ -189,6 +206,10 @@ app.post('/api/auth/login', async (req, res) => {
         
         req.session.userId = user._id.toString();
         req.session.username = user.username;
+        
+        console.log('✅ Login successful for:', email);
+        console.log('Session ID:', req.sessionID);
+        console.log('User ID:', req.session.userId);
         
         res.json({ 
             message: 'Login successful',
