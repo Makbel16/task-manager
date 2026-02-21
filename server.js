@@ -19,20 +19,22 @@ console.log('SESSION_SECRET:', process.env.SESSION_SECRET ? 'Found ✓' : 'Not f
 
 // ==================== MIDDLEWARE - ORDER IS CRITICAL ====================
 
+// Trust proxy - required for Vercel
+app.set('trust proxy', 1);
+
 // 1. CORS middleware first
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production' 
-        ? ['https://task-manager-beta-green-62.vercel.app', 'https://*.vercel.app']
-        : true,
+    origin: 'https://task-manager-beta-green-62.vercel.app',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 
 // 2. JSON parser for API requests
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// 3. Static files middleware - THIS MUST COME BEFORE ROUTES
+// 3. Static files middleware
 app.use(express.static('public'));
 
 // ==================== EXPLICIT STATIC FILE ROUTES ====================
@@ -69,7 +71,31 @@ app.get('/image1.png', (req, res) => {
 
 // 4. Logging middleware (for debugging)
 app.use((req, res, next) => {
-    console.log(`${req.method} ${req.url}`);
+    console.log(`📝 ${req.method} ${req.url} - Session: ${req.sessionID || 'none'}`);
+    next();
+});
+
+// ==================== SESSION MIDDLEWARE - FIXED FOR VERCEL ====================
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'your-secret-key-change-this',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: true, // Vercel uses HTTPS
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+        sameSite: 'none', // Allow cross-site requests
+        domain: '.vercel.app' // Share cookie across vercel.app subdomains
+    }
+}));
+
+// Session debug middleware
+app.use((req, res, next) => {
+    console.log('🔍 Session Debug:', {
+        sessionID: req.sessionID,
+        userId: req.session.userId,
+        cookie: req.session.cookie
+    });
     next();
 });
 
@@ -92,10 +118,12 @@ app.get('/signup', (req, res) => {
 
 // Serve dashboard page (with auth check)
 app.get('/dashboard', (req, res) => {
+    console.log('🚪 Dashboard access attempt - User ID:', req.session.userId);
     if (!req.session.userId) {
-        console.log('Unauthenticated access to dashboard, redirecting to login');
+        console.log('⛔ Unauthenticated access to dashboard, redirecting to login');
         return res.redirect('/login');
     }
+    console.log('✅ Authenticated access to dashboard');
     res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
 });
 
@@ -110,18 +138,15 @@ app.get('/api', (req, res) => {
     });
 });
 
-// ==================== SESSION MIDDLEWARE ====================
-app.use(session({
-    secret: process.env.SESSION_SECRET || 'your-secret-key-change-this',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { 
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 24 * 60 * 60 * 1000,
-        sameSite: 'lax',
-        httpOnly: true
-    }
-}));
+// ==================== TEST SESSION ENDPOINT ====================
+app.get('/api/test-session', (req, res) => {
+    res.json({
+        sessionID: req.sessionID,
+        userId: req.session.userId,
+        session: req.session,
+        cookies: req.headers.cookie
+    });
+});
 
 // ==================== AUTHENTICATION MIDDLEWARE ====================
 function isAuthenticated(req, res, next) {
@@ -181,7 +206,7 @@ app.post('/api/auth/signup', async (req, res) => {
     }
 });
 
-// Login
+// Login - FIXED with session
 app.post('/api/auth/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -204,20 +229,29 @@ app.post('/api/auth/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
         
+        // Set session
         req.session.userId = user._id.toString();
         req.session.username = user.username;
         
-        console.log('✅ Login successful for:', email);
-        console.log('Session ID:', req.sessionID);
-        console.log('User ID:', req.session.userId);
-        
-        res.json({ 
-            message: 'Login successful',
-            user: {
-                id: user._id.toString(),
-                username: user.username,
-                email: user.email
+        // Save session explicitly
+        req.session.save((err) => {
+            if (err) {
+                console.error('Session save error:', err);
+                return res.status(500).json({ error: 'Failed to create session' });
             }
+            
+            console.log('✅ Session created for user:', email);
+            console.log('Session ID:', req.sessionID);
+            console.log('User ID:', req.session.userId);
+            
+            res.json({ 
+                message: 'Login successful',
+                user: {
+                    id: user._id.toString(),
+                    username: user.username,
+                    email: user.email
+                }
+            });
         });
         
     } catch (error) {
@@ -232,6 +266,7 @@ app.post('/api/auth/logout', (req, res) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to logout' });
         }
+        res.clearCookie('connect.sid');
         res.json({ message: 'Logout successful' });
     });
 });

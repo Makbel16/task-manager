@@ -1,10 +1,5 @@
 // API base URL
-const API_BASE = '/api';  // ✅ THIS IS CORRECT!
-console.log('Fetching URL:', `${API_BASE}/auth/signup`);
-
-// DOM Elements
-const loginForm = document.getElementById('loginForm');
-const signupForm = document.getElementById('signupForm');
+const API_BASE = '/api';
 
 // Password strength checker
 function checkPasswordStrength(password) {
@@ -60,7 +55,11 @@ if (passwordInput) {
     });
 }
 
-// Login form handler
+// DOM Elements
+const loginForm = document.getElementById('loginForm');
+const signupForm = document.getElementById('signupForm');
+
+// Login form handler - FIXED with credentials
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -76,15 +75,20 @@ if (loginForm) {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
         
         try {
-            const response = await fetch(`${API_BASE}/auth/login`,  {
+            console.log('🔵 Attempting login for:', email);
+            
+            const response = await fetch(`${API_BASE}/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ email, password }),
+                credentials: 'include' // CRITICAL for sessions
             });
             
+            console.log('📊 Response status:', response.status);
             const data = await response.json();
+            console.log('📦 Response data:', data);
             
             if (!response.ok) {
                 throw new Error(data.error || 'Login failed');
@@ -100,11 +104,11 @@ if (loginForm) {
             showNotification('Login successful! Redirecting...', 'success');
             
             // Redirect to dashboard
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1500);
+            console.log('➡️ Redirecting to dashboard...');
+            window.location.href = '/dashboard';
             
         } catch (error) {
+            console.error('❌ Login error:', error);
             showNotification(error.message, 'error');
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalText;
@@ -112,7 +116,7 @@ if (loginForm) {
     });
 }
 
-// Signup form handler
+// Signup form handler - FIXED with credentials
 if (signupForm) {
     signupForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -140,15 +144,20 @@ if (signupForm) {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
         
         try {
-           const response = await fetch(`${API_BASE}/auth/signup`, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ username, email, password })
-});
+            console.log('🔵 Attempting signup for:', email);
             
+            const response = await fetch(`${API_BASE}/auth/signup`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, email, password }),
+                credentials: 'include'
+            });
+            
+            console.log('📊 Response status:', response.status);
             const data = await response.json();
+            console.log('📦 Response data:', data);
             
             if (!response.ok) {
                 throw new Error(data.error || 'Signup failed');
@@ -158,10 +167,11 @@ if (signupForm) {
             
             // Redirect to login page
             setTimeout(() => {
-                window.location.href = 'login.html';
+                window.location.href = '/login';
             }, 2000);
             
         } catch (error) {
+            console.error('❌ Signup error:', error);
             showNotification(error.message, 'error');
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalText;
@@ -169,23 +179,24 @@ if (signupForm) {
     });
 }
 
-
+// Notification function
 function showNotification(message, type = 'info') {
     // Remove existing notifications
     const existingNotifications = document.querySelectorAll('.notification');
     existingNotifications.forEach(notif => notif.remove());
     
+    // Create notification element
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
     notification.innerHTML = `
-        <i class="fas ${type === 'success' ? 'fa-check-circle' : 
-                         type === 'error' ? 'fa-exclamation-circle' : 
-                         'fa-info-circle'}"></i>
+        <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
         <span>${message}</span>
     `;
     
+    // Add to page
     document.body.appendChild(notification);
     
+    // Remove after 3 seconds
     setTimeout(() => {
         notification.remove();
     }, 3000);
@@ -200,17 +211,19 @@ style.textContent = `
         right: 20px;
         padding: 1rem 1.5rem;
         background: white;
-        border-radius: 8px;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         display: flex;
         align-items: center;
         gap: 0.75rem;
         z-index: 9999;
         animation: slideInRight 0.3s;
+        max-width: 350px;
+        border-left: 4px solid;
     }
     
     .notification.success {
-        border-left: 4px solid #10b981;
+        border-left-color: #10b981;
     }
     
     .notification.success i {
@@ -218,7 +231,7 @@ style.textContent = `
     }
     
     .notification.error {
-        border-left: 4px solid #ef4444;
+        border-left-color: #ef4444;
     }
     
     .notification.error i {
@@ -226,7 +239,7 @@ style.textContent = `
     }
     
     .notification.info {
-        border-left: 4px solid #3b82f6;
+        border-left-color: #3b82f6;
     }
     
     .notification.info i {
@@ -245,6 +258,4 @@ style.textContent = `
     }
 `;
 
-
 document.head.appendChild(style);
-
