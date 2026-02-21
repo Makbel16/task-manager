@@ -1,5 +1,5 @@
 // API base URL
-const API_BASE = '/api/auth';
+console.log('Fetching URL:', `${API_BASE}/auth/signup`);
 
 // DOM Elements
 const loginForm = document.getElementById('loginForm');
