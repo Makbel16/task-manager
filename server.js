@@ -31,12 +31,44 @@ app.use(express.json());
 // 3. Static files middleware - THIS MUST COME BEFORE ROUTES
 // This serves all CSS, JS, images from public folder
 app.use(express.static('public'));
+// ==================== EXPLICIT STATIC FILE ROUTES ====================
+// Serve CSS files explicitly
+app.get('/style.css', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'style.css'));
+});
+app.get('/login.css', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login.css'));
+});
+app.get('/signup.css', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'signup.css'));
+});
+app.get('/dashb.css', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'dashb.css'));
+});
+
+// Serve JavaScript files explicitly
+app.get('/auth.js', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'auth.js'));
+});
+app.get('/dashboard.js', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'dashboard.js'));
+});
+app.get('/script.js', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'script.js'));
+});
+
+// Serve images explicitly
+app.get('/image1.png', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'image1.png'));
+});
+// ==================== END EXPLICIT ROUTES ====================
 
 // 4. Logging middleware (optional, for debugging)
 app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`);
     next();
 });
+
 
 // ==================== HTML ROUTES ====================
 
