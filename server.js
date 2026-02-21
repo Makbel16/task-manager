@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const path = require('path');  // ADD THIS LINE - IMPORTANT for serving HTML
+const path = require('path');
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
 const { connectToDatabase } = require('./db');
@@ -17,15 +17,29 @@ console.log('✅ Server starting...');
 console.log('MONGODB_URI:', process.env.MONGODB_URI ? 'Found ✓' : 'Not found ✗');
 console.log('SESSION_SECRET:', process.env.SESSION_SECRET ? 'Found ✓' : 'Not found ✗');
 
-// Middleware
+// ==================== MIDDLEWARE - ORDER IS CRITICAL ====================
+
+// 1. CORS middleware first
 app.use(cors({
     origin: true,
     credentials: true
 }));
+
+// 2. JSON parser for API requests
 app.use(express.json());
+
+// 3. Static files middleware - THIS MUST COME BEFORE ROUTES
+// This serves all CSS, JS, images from public folder
 app.use(express.static('public'));
 
-// ==================== ADD THESE ROUTES TO SERVE HTML PAGES ====================
+// 4. Logging middleware (optional, for debugging)
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+});
+
+// ==================== HTML ROUTES ====================
+
 // Serve index.html for the root route
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -45,9 +59,9 @@ app.get('/signup', (req, res) => {
 app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
 });
-// ==================== END OF HTML ROUTES ====================
 
-// Session middleware
+// ==================== SESSION MIDDLEWARE ====================
+
 app.use(session({
     secret: process.env.SESSION_SECRET || 'your-secret-key-change-this',
     resave: false,
@@ -59,7 +73,8 @@ app.use(session({
     }
 }));
 
-// Authentication middleware
+// ==================== AUTHENTICATION MIDDLEWARE ====================
+
 function isAuthenticated(req, res, next) {
     if (req.session.userId) {
         next();
