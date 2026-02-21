@@ -386,3 +386,5 @@ if (!process.env.VERCEL) {
         console.error('❌ Failed to start server:', error);
     });
 }
+
+// Force redeploy with fixed middleware order $(date)" 
