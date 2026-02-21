@@ -75,7 +75,7 @@ if (loginForm) {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
         
         try {
-            const response = await fetch(`${API_BASE}/login`, {
+            const response = await fetch(`${API_BASE}/auth/login`,  {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -139,13 +139,13 @@ if (signupForm) {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
         
         try {
-            const response = await fetch(`${API_BASE}/signup`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, email, password })
-            });
+           const response = await fetch(`${API_BASE}/auth/signup`, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ username, email, password })
+});
             
             const data = await response.json();
             
