@@ -5,16 +5,18 @@ const API_BASE = '/api';
 // Check authentication
 async function checkAuth() {
     try {
-        const response = await fetch(`${API_BASE}/auth/me`);
+        const response = await fetch(`${API_BASE}/auth/me`, {
+            credentials: 'include' // CRITICAL: Include cookies in request
+        });
         if (!response.ok) {
-            window.location.href = 'login.html';
+            window.location.href = '/login';
             return null;
         }
         const user = await response.json();
         return user;
     } catch (error) {
         console.error('Auth check failed:', error);
-        window.location.href = 'login.html';
+        window.location.href = '/login';
         return null;
     }
 }
@@ -41,7 +43,12 @@ async function loadDashboard() {
 // Load tasks
 async function loadTasks() {
     try {
-        const response = await fetch(`${API_BASE}/tasks`);
+        const response = await fetch(`${API_BASE}/tasks`, {
+            credentials: 'include' // CRITICAL: Include cookies in request
+        });
+        if (!response.ok) {
+            throw new Error('Failed to load tasks');
+        }
         const tasks = await response.json();
         
         updateStats(tasks);
@@ -132,7 +139,8 @@ async function toggleTaskStatus(taskId, completed) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ completed })
+            body: JSON.stringify({ completed }),
+            credentials: 'include'
         });
         
         if (!response.ok) throw new Error('Failed to update task');
@@ -151,7 +159,8 @@ async function deleteTask(taskId) {
     
     try {
         const response = await fetch(`${API_BASE}/tasks/${taskId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            credentials: 'include'
         });
         
         if (!response.ok) throw new Error('Failed to delete task');
@@ -168,7 +177,9 @@ async function deleteTask(taskId) {
 async function editTask(taskId) {
     try {
         // Fetch task details
-        const response = await fetch(`${API_BASE}/tasks/${taskId}`);
+        const response = await fetch(`${API_BASE}/tasks/${taskId}`, {
+            credentials: 'include'
+        });
         if (!response.ok) throw new Error('Task not found');
         
         const task = await response.json();
@@ -252,7 +263,8 @@ document.getElementById('taskForm').addEventListener('submit', async (e) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(taskData)
+                body: JSON.stringify(taskData),
+                credentials: 'include'
             });
         } else {
             // Create new task
@@ -261,7 +273,8 @@ document.getElementById('taskForm').addEventListener('submit', async (e) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(taskData)
+                body: JSON.stringify(taskData),
+                credentials: 'include'
             });
         }
         
@@ -515,7 +528,12 @@ async function filterTasks() {
 
 // Fetch tasks
 async function fetchTasks() {
-    const response = await fetch(`${API_BASE}/tasks`);
+    const response = await fetch(`${API_BASE}/tasks`, {
+        credentials: 'include'
+    });
+    if (!response.ok) {
+        throw new Error('Failed to fetch tasks');
+    }
     const tasks = await response.json();
     localStorage.setItem('currentTasks', JSON.stringify(tasks));
     return tasks;
@@ -1090,12 +1108,19 @@ function debounce(func, wait) {
 // Logout
 document.getElementById('logoutBtn').addEventListener('click', async () => {
     try {
-        await fetch(`${API_BASE}/auth/logout`, { method: 'POST' });
+        await fetch(`${API_BASE}/auth/logout`, { 
+            method: 'POST',
+            credentials: 'include'
+        });
         localStorage.removeItem('user');
         localStorage.removeItem('currentTasks');
-        window.location.href = 'index.html';
+        window.location.href = '/';
     } catch (error) {
         console.error('Logout error:', error);
+        // Still redirect even if logout fails
+        localStorage.removeItem('user');
+        localStorage.removeItem('currentTasks');
+        window.location.href = '/';
     }
 });
 

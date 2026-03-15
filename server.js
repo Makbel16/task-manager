@@ -22,9 +22,18 @@ console.log('SESSION_SECRET:', process.env.SESSION_SECRET ? 'Found ✓' : 'Not f
 // Trust proxy - required for Vercel
 app.set('trust proxy', 1);
 
-// 1. CORS middleware first
+// 1. CORS middleware first - Allow all Vercel deployments
 app.use(cors({
-    origin: 'https://task-manager-beta-green-62.vercel.app',
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        // Allow all vercel.app domains
+        if (origin.includes('.vercel.app') || origin.includes('localhost') || origin.includes('127.0.0.1')) {
+            callback(null, true);
+        } else {
+            callback(null, true); // Allow all origins for now - tighten this in production
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
@@ -81,11 +90,11 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: true, // Vercel uses HTTPS
+        secure: process.env.NODE_ENV === 'production', // HTTPS in production
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
-        sameSite: 'none', // Allow cross-site requests
-        domain: '.vercel.app' // Share cookie across vercel.app subdomains
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for cross-site in production
+        // Don't set domain - let browser handle it automatically
     }
 }));
 
