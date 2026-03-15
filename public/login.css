@@ -218,10 +218,9 @@
     color: white;
 }
 
-/* Password stars font */
-.form-group input[value="*********"],
+/* Password input styling */
 .form-group input[type="password"] {
-    font-family: 'password', Arial, sans-serif;
+    /* Use the default browser password bullets/dots */
     letter-spacing: 2px;
 }
 
@@ -423,13 +422,7 @@
     color: rgba(255, 255, 255, 0.5);
 }
 
-/* Password font for stars */
-@font-face {
-    font-family: 'password';
-    src: url('https://cdn.jsdelivr.net/npm/password-font@1.0.0/fonts/password.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
-}
+/* Removed custom external password font that 404s on production */
 
 /* Responsive Design */
 @media (max-width: 480px) {
